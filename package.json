@@ -1,0 +1,45 @@
+{
+  "name": "gulp-react-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for developing React App with Browserify and Gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rico345100/gulp-react-boilerplate"
+  },
+  "keywords": [
+    "react",
+    "browserify",
+    "gulp"
+  ],
+  "author": ".modernator",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-class-properties": "^6.22.0",
+    "babel-plugin-transform-regenerator": "^6.22.0",
+    "babel-polyfill": "^6.22.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.18.6",
+    "browserify": "^13.3.0",
+    "gulp": "^3.9.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.8",
+    "merge-stream": "^1.0.1",
+    "persistify": "^1.1.1",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.8.0",
+    "yargs": "^6.6.0"
+  }
+}

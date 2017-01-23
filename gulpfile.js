@@ -1,0 +1,204 @@
+'use strict';
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const rename = require('gulp-rename');
+const merge = require('merge-stream');
+
+const persistify = require('persistify');
+const watchify = require('watchify');
+const babelify = require('babelify');
+const uglify = require('gulp-uglify');
+
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+
+const htmlmin = require('gulp-htmlmin');
+const cssnano = require('gulp-cssnano');
+
+const yargs = require('yargs');
+const argv = yargs.argv;
+
+const browserSync = require('browser-sync').create();
+
+const vendors = ['react', 'react-dom'];
+const isProduction = argv.p || argv.prod || argv.production;
+
+const SRC_DIR = './src';
+const BUILD_DIR = './build';
+
+function swallowError (error) {
+	console.log(error.toString());
+	this.emit('end');
+}
+
+function buildHtml() {
+	let buildStartTime = null;
+	let buildEndTime = null;
+
+	function run() {
+		buildStartTime = new Date();
+
+		let stream = gulp.src(`${SRC_DIR}/html/index.html`)
+		.on('error', swallowError)
+		.on('end', () => {
+			buildEndTime = new Date();
+			gutil.log(`Building HTML done. (Time elapsed ${buildEndTime - buildStartTime}ms.)`);
+		})
+
+		if(isProduction) {
+			stream.pipe(htmlmin({collapseWhitespace: true}));
+		}
+
+		return stream.pipe(gulp.dest(`${BUILD_DIR}/html`));
+	} 
+
+	gulp.watch(`${SRC_DIR}/html/**`, () => {
+		gutil.log('Detect HTML changes. Rebuilding...');
+		return run();
+	});
+
+	return run();
+}
+
+function buildCss() {
+	let buildStartTime = null;
+	let buildEndTime = null;
+
+	function run() {
+		buildStartTime = new Date();
+
+		let stream = gulp.src(`${SRC_DIR}/css/app.css`)
+		.on('error', swallowError)
+		.on('end', () => {
+			buildEndTime = new Date();
+			gutil.log(`Building CSS done. (Time elapsed ${buildEndTime - buildStartTime}ms.)`);
+		})
+
+		if(isProduction) {
+			stream.pipe(cssnano());
+		}
+
+		return stream.pipe(gulp.dest(`${BUILD_DIR}/css`))
+		.pipe(browserSync.stream());
+	} 
+
+	gulp.watch(`${SRC_DIR}/css/**`, () => {
+		gutil.log('Detect CSS changes. Rebuilding...');
+		return run();
+	});
+
+	return run();
+}
+
+function buildVendor() {
+	const b = persistify({ debug: false });
+
+	vendors.forEach(vendor => {
+		b.require(vendor);
+	});
+
+	return b.bundle()
+	.on('error', swallowError)
+	.on('end', () => {
+		browserSync.reload();
+	})
+	.pipe(source('vendor.js'))
+	.pipe(buffer())
+	.pipe(uglify())
+	.pipe(gulp.dest(`${BUILD_DIR}/js`));
+}
+
+function buildJs() {
+	let bopts = {
+		paths: [
+			`${SRC_DIR}/js`, 
+		],
+		debug: !isProduction
+	};
+	let opts = Object.assign({}, watchify.args, bopts);
+
+	let b = watchify(persistify(opts))
+	.add(`${SRC_DIR}/js/index.js`)
+	.on('update', bundle)
+	.on('log', gutil.log)
+	.external(vendors)
+	.transform(babelify, { 
+		presets: ["es2015", "react"],
+		plugins: [
+			"syntax-async-functions",
+			"transform-regenerator",
+			"transform-class-properties"
+		]
+	});
+	
+	function bundle() {
+		let stream = b.bundle()
+		.on('error', swallowError)
+		.on('end', () => {
+			browserSync.reload();
+		})
+		.on('error', swallowError)
+		.pipe(source('index.js'))
+		.pipe(buffer())
+		.pipe(rename('bundle.js'));
+
+		if(isProduction) {
+			stream.pipe(uglify());
+		}
+
+		return stream.pipe(gulp.dest(`${BUILD_DIR}/js`));
+	}
+
+	return bundle();
+}
+
+function serve() {
+	browserSync.init({
+		server: {
+			baseDir: [
+				BUILD_DIR,
+				`${BUILD_DIR}/html`,
+				`${BUILD_DIR}/css`,
+				`${BUILD_DIR}/js`
+			]
+		}
+	});
+
+	gulp.watch(`${SRC_DIR}/html/**`, buildHtml);
+	gulp.watch(`${SRC_DIR}/css/**`, buildCss);
+
+	gulp.watch(`${BUILD_DIR}/html/index.html`).on('change', browserSync.reload);
+
+	// return empty stream
+	return gutil.noop();	
+}
+
+
+gulp.task('default', () => {
+	return merge([
+		buildHtml(),
+		buildCss(),
+		buildJs(),
+		buildVendor(),
+		serve()
+	]);
+});
+
+gulp.task('build::html', () => {
+	return buildHtml();
+});
+
+gulp.task('build::css', () => {
+	return buildCss();
+});
+
+gulp.task('build::script', () => {
+	return merge([
+		buildJs(), 
+		buildVendor()
+	]);
+});
+
+gulp.task('serve', () => {
+	return serve();
+});
