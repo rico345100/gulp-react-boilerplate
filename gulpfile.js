@@ -184,6 +184,15 @@ gulp.task('default', () => {
 	]);
 });
 
+gulp.task('build', () => {
+	return merge([
+		buildHtml(),
+		buildCss(),
+		buildJs(),
+		buildVendor()
+	]);
+});
+
 gulp.task('build::html', () => {
 	return buildHtml();
 });

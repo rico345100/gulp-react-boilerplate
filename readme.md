@@ -49,18 +49,18 @@ By default, will follow these steps:
 ### gulp serve
 Start browser-sync and serve resources, with watching all changes.
 
+### gulp build
+Build all resources.
+
 ### gulp build::html
 Build HTML resources. In production build, it uses gulp-htmlmin to minify HTML.
-On watching HTML, rebuilding HTML will refresh the served page.
 
 ### gulp build::css
 Build CSS resources. In production build, it uses gulp-cssnano to minify CSS.
-On watching HTML, rebuilding CSS will inject into the served page directly without refresh.
 
 ### gulp build::script
 Build JS resources. It will create two scripts, vendor.js and bundle.js.
 vendor.js contains common scripts and bundle.js contains actual your code.
-On watching scripts, rebuilding scripts will refresh the served page.
 
 
 ## Production Build
