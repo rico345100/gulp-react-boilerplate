@@ -8,6 +8,7 @@ const persistify = require('persistify');
 const watchify = require('watchify');
 const babelify = require('babelify');
 const uglify = require('gulp-uglify');
+const envify = require('envify');
 
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
@@ -20,7 +21,10 @@ const argv = yargs.argv;
 
 const browserSync = require('browser-sync').create();
 
-const vendors = ['react', 'react-dom'];
+const vendors = [
+	'react',
+	'react-dom'
+];
 const isProduction = argv.p || argv.prod || argv.production;
 
 const SRC_DIR = './src';
@@ -97,6 +101,12 @@ function buildVendor() {
 		b.require(vendor);
 	});
 
+	if(isProduction) {
+		b.transform(envify({
+			NODE_ENV: 'production'
+		}));
+	}
+
 	return b.bundle()
 	.on('error', swallowError)
 	.on('end', () => {
@@ -130,6 +140,12 @@ function buildJs() {
 			"transform-class-properties"
 		]
 	});
+
+	if(isProduction) {
+		b.transform(envify({
+			NODE_ENV: 'production'
+		}));
+	}
 	
 	function bundle() {
 		let stream = b.bundle()
