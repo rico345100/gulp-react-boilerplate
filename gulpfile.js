@@ -107,15 +107,19 @@ function buildVendor() {
 		}));
 	}
 
-	return b.bundle()
+	let stream = b.bundle()
 	.on('error', swallowError)
 	.on('end', () => {
 		browserSync.reload();
 	})
-	.pipe(source('vendor.js'))
-	.pipe(buffer())
-	.pipe(uglify())
-	.pipe(gulp.dest(`${BUILD_DIR}/js`));
+	.pipe(source('vendor.js'));
+
+	if(isProduction) {
+		stream.pipe(buffer())
+		.pipe(uglify());
+	}
+
+	return stream.pipe(gulp.dest(`${BUILD_DIR}/js`));
 }
 
 function buildJs() {
