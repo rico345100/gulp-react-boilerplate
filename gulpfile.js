@@ -3,6 +3,7 @@ const gulp = require('gulp');
 const gutil = require('gulp-util');
 const rename = require('gulp-rename');
 const merge = require('merge-stream');
+const runSequence = require('run-sequence');
 
 const persistify = require('persistify');
 const watchify = require('watchify');
@@ -195,13 +196,7 @@ function serve() {
 
 
 gulp.task('default', () => {
-	return merge([
-		buildHtml(),
-		buildCss(),
-		buildJs(),
-		buildVendor(),
-		serve()
-	]);
+	runSequence('build', 'serve');
 });
 
 gulp.task('build', () => {
