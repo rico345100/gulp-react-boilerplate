@@ -9,7 +9,6 @@ const persistify = require('persistify');
 const watchify = require('watchify');
 const babelify = require('babelify');
 const uglify = require('gulp-uglify');
-const envify = require('envify');
 
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
@@ -27,6 +26,10 @@ const vendors = [
 	'react-dom'
 ];
 const isProduction = argv.p || argv.prod || argv.production;
+
+if(isProduction) {
+	process.env.NODE_ENV = 'production';
+}
 
 const SRC_DIR = './src';
 const BUILD_DIR = './build';
@@ -102,12 +105,6 @@ function buildVendor() {
 		b.require(vendor);
 	});
 
-	if(isProduction) {
-		b.transform(envify({
-			NODE_ENV: 'production'
-		}));
-	}
-
 	let stream = b.bundle()
 	.on('error', swallowError)
 	.on('end', () => {
@@ -145,12 +142,6 @@ function buildJs() {
 			"transform-class-properties"
 		]
 	});
-
-	if(isProduction) {
-		b.transform(envify({
-			NODE_ENV: 'production'
-		}));
-	}
 	
 	function bundle() {
 		let stream = b.bundle()

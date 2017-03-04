@@ -40,11 +40,11 @@ $ gulp
 
 ## Tasks
 ### gulp default
-By default, will follow these steps:
+By default, will proceed these steps:
 
 1. Build HTML/CSS/JS
 2. Initiate browser-sync and serve resources
-3. Watch all changes
+3. Watch all changes and refresh or inject(css only)
 
 ### gulp serve
 Start browser-sync and serve resources, with watching all changes.
@@ -71,7 +71,7 @@ To set your application production mode, simply add --p or --prod or --productio
 $ gulp --p
 
 // Build JS only with Production state
-$ gulp build::script -p
+$ gulp build::script --p
 ```
 
 
