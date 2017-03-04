@@ -110,11 +110,12 @@ function buildVendor() {
 	.on('end', () => {
 		browserSync.reload();
 	})
-	.pipe(source('vendor.js'));
+	.pipe(source('vendor.js'))
+	.pipe(buffer())
+	.pipe(rename('vendor.js'));
 
 	if(isProduction) {
-		stream.pipe(buffer())
-		.pipe(uglify());
+		stream.pipe(uglify());
 	}
 
 	return stream.pipe(gulp.dest(`${BUILD_DIR}/js`));
