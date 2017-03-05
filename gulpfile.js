@@ -1,9 +1,11 @@
 'use strict';
+const config = require('./config.json');
+
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const merge = require('merge-stream');
 const runSequence = require('run-sequence');
-const streamify = require('gulp-streamify');
+const nodemon = require('gulp-nodemon');
 
 const persistify = require('persistify');
 const watchify = require('watchify');
@@ -12,6 +14,7 @@ const uglify = require('gulp-uglify');
 const scssify = require('scssify');
 
 const source = require('vinyl-source-stream');
+const streamify = require('gulp-streamify');
 
 const sass = require('gulp-sass');
 const htmlmin = require('gulp-htmlmin');
@@ -20,13 +23,13 @@ const cssnano = require('gulp-cssnano');
 const yargs = require('yargs');
 const argv = yargs.argv;
 
-const browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync');
 
 const vendors = [
 	'react',
 	'react-dom'
 ];
-const isProduction = argv.p || argv.prod || argv.production;
+const isProduction = config.environment === 'production';
 
 if(isProduction) {
 	process.env.NODE_ENV = 'production';
@@ -76,7 +79,7 @@ function buildScss() {
 	function run() {
 		buildStartTime = new Date();
 
-		let stream = gulp.src(`${SRC_DIR}/css/app.css`)
+		let stream = gulp.src(`${SRC_DIR}/scss/app.scss`)
 		.on('error', swallowError)
 		.on('end', () => {
 			buildEndTime = new Date();
@@ -168,24 +171,27 @@ function buildJs() {
 }
 
 function serve() {
-	browserSync.init({
-		server: {
-			baseDir: [
-				BUILD_DIR,
-				`${BUILD_DIR}/html`,
-				`${BUILD_DIR}/css`,
-				`${BUILD_DIR}/js`
-			]
+	let serverStarted = false;
+
+	nodemon({ script: 'server.js' })
+	.on('start', () => {
+		if(!serverStarted) {
+			serverStarted = true;
+
+			browserSync.init(null, {
+				proxy: `localhost:${config.port || 3000}`,
+				port: config.proxyPort || 4000
+			});
+
+			gulp.watch(`${SRC_DIR}/html/**`, buildHtml);
+			gulp.watch(`${SRC_DIR}/scss/**`, buildScss);
+
+			gulp.watch(`${BUILD_DIR}/html/index.html`).on('change', browserSync.reload);
+
+			// return empty stream
+			return gutil.noop();	
 		}
 	});
-
-	gulp.watch(`${SRC_DIR}/html/**`, buildHtml);
-	gulp.watch(`${SRC_DIR}/scss/**`, buildScss);
-
-	gulp.watch(`${BUILD_DIR}/html/index.html`).on('change', browserSync.reload);
-
-	// return empty stream
-	return gutil.noop();	
 }
 
 

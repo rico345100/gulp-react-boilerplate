@@ -1,12 +1,13 @@
 # gulp-react-boilerplate
-Boilerplate for developing React App with Browserify and Gulp.
+Boilerplate for developing React App with Browserify and Gulp, with Server Side as Express with Browser-Sync.
 
 
 ## What is this?
-It is a just boilerplate for developing React Application with Browserify + Gulp.
+It is a just boilerplate for developing React Application with Browserify + Express + Gulp + Browser-Sync.
 
 
 ## Features
+- Express
 - Livereload (feat. Browser-Sync)
 - SASS compiling
 - JS/CSS/HTML minification on production build
@@ -44,11 +45,14 @@ $ gulp
 By default, will proceed these steps:
 
 1. Build HTML/SCSS/JS
-2. Initiate browser-sync and serve resources
+2. Start Express server and initiate browser-sync
 3. Watch all changes and refresh or inject(scss as css only)
 
 ### gulp serve
-Start browser-sync and serve resources, with watching all changes.
+Start server with Express, also initiate Browser-Sync with Express server.
+Express will uses port number in config.json, and Browser-Sync will uses proxyPort number in config.json.
+After you change your server code, nodemon will restarts Express server automatically.
+Or if you change your client resources, browser-sync will reload or inject client resources automatically.
 
 ### gulp build
 Build all resources.
@@ -65,15 +69,8 @@ vendor.js contains common scripts and bundle.js contains actual your code.
 
 
 ## Production Build
-To set your application production mode, simply add --p or --prod or --production when using gulp:
-
-```bash
-// Run everything with Production state
-$ gulp --p
-
-// Build JS only with Production state
-$ gulp build::script --p
-```
+To set your application production mode, simply update environment variable inside of config.json to "production".
+Also don't run your server with "gulp serv" in production state!
 
 
 ## License
