@@ -1,5 +1,5 @@
 {
-	"environment": "production",
+	"environment": "develoment",
 	"port": 3000,
 	"proxyPort": 4000
 }
