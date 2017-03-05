@@ -8,6 +8,7 @@ It is a just boilerplate for developing React Application with Browserify + Gulp
 
 ## Features
 - Livereload (feat. Browser-Sync)
+- SASS compiling
 - JS/CSS/HTML minification on production build
 - ES2015 Support
 - React Support
@@ -42,9 +43,9 @@ $ gulp
 ### gulp default
 By default, will proceed these steps:
 
-1. Build HTML/CSS/JS
+1. Build HTML/SCSS/JS
 2. Initiate browser-sync and serve resources
-3. Watch all changes and refresh or inject(css only)
+3. Watch all changes and refresh or inject(scss as css only)
 
 ### gulp serve
 Start browser-sync and serve resources, with watching all changes.
@@ -55,8 +56,8 @@ Build all resources.
 ### gulp build::html
 Build HTML resources. In production build, it uses gulp-htmlmin to minify HTML.
 
-### gulp build::css
-Build CSS resources. In production build, it uses gulp-cssnano to minify CSS.
+### gulp build::scss
+Build SCSS resources. In production build, it uses gulp-cssnano to minify CSS.
 
 ### gulp build::script
 Build JS resources. It will create two scripts, vendor.js and bundle.js.

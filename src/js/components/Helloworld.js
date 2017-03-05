@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import 'components/Helloworld.scss';
 
 class Helloworld extends Component {
 	render() {
