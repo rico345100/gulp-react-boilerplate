@@ -15,15 +15,15 @@ It is a just boilerplate for developing React Application with Browserify + Expr
 - React Support
 - Class Properties
 - ES7 Async & Await
-	- Yes, it uses babel-polyfill. If you feeling that babel-polyfill is too heavy, remove from depedencies and your code, but you cannot use Async & Await anymore. I recommend that just use it, but if really hate it, then use ES6 Generator Coroutine instead.
+	- Yes, it uses babel-polyfill. If you feeling that babel-polyfill is too heavy, remove from depedencies and your code, but you cannot use Async & Await anymore. I recommend that just use it, but if you really hate it, then you can use ES6 Generator Coroutine instead.
 - ESLint
 
 
 ## To Start
-This project will provides as minimal as possible, so if you want to add some more functionalities, 
-Using sass or TypeScript, you must do it yourself.
+This project will provides as minimal as possible, so if you want to add some more functionalities, you have to add manually.
+If you want to looking for exactly same, but want to use TypeScript, follow this [link](https://github.com/rico345100/gulp-react-typescript-boilerplate).
 
-Basic usage is:
+Basic usage:
 
 ```bash
 $ npm install
@@ -46,13 +46,13 @@ By default, will proceed these steps:
 
 1. Build HTML/SCSS/JS
 2. Start Express server and initiate browser-sync
-3. Watch all changes and refresh or inject(scss as css only)
+3. Watch all changes and refresh or inject(scss as css only) your client resources.
 
 ### gulp serve
 Start server with Express, also initiate Browser-Sync with Express server.
-Express will uses port number in config.json, and Browser-Sync will uses proxyPort number in config.json.
-After you change your server code, nodemon will restarts Express server automatically.
-Or if you change your client resources, browser-sync will reload or inject client resources automatically.
+Express will uses port number in config.json(default 3000), and Browser-Sync will uses proxyPort number in config.json(default 4000).
+After you change your server side code, nodemon will restarts Express server automatically.
+If you change your clients side resources, browser-sync will reload or inject client resources automatically.
 
 ### gulp build
 Build all resources.
@@ -69,8 +69,8 @@ vendor.js contains common scripts and bundle.js contains actual your code.
 
 
 ## Production Build
-To set your application production mode, simply update environment variable inside of config.json to "production".
-Also don't run your server with "gulp serv" in production state!
+To set your application production mode, simply update "environment" inside of config.json to "production".
+Also don't run your server with "gulp serve" in production state!
 
 
 ## License
