@@ -42,7 +42,6 @@
     "run-sequence": "^1.2.2",
     "scssify": "^2.2.1",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.8.0",
     "yargs": "^6.6.0"
   },
   "dependencies": {

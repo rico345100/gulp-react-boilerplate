@@ -8,7 +8,6 @@ const runSequence = require('run-sequence');
 const nodemon = require('gulp-nodemon');
 
 const persistify = require('persistify');
-const watchify = require('watchify');
 const babelify = require('babelify');
 const uglify = require('gulp-uglify');
 const scssify = require('scssify');
@@ -55,19 +54,21 @@ function buildHtml() {
 		.on('end', () => {
 			buildEndTime = new Date();
 			gutil.log(`Building HTML done. (Time elapsed ${buildEndTime - buildStartTime}ms.)`);
-		})
+		});
 
 		if(isProduction) {
 			stream.pipe(htmlmin({collapseWhitespace: true}));
 		}
 
 		return stream.pipe(gulp.dest(`${BUILD_DIR}/html`));
-	} 
+	}
 
-	gulp.watch(`${SRC_DIR}/html/**`, () => {
-		gutil.log('Detect HTML changes. Rebuilding...');
-		return run();
-	});
+	if(!argv.once) {
+		gulp.watch(`${SRC_DIR}/html/**`, () => {
+			gutil.log('Detect HTML changes. Rebuilding...');
+			return run();
+		});
+	}
 
 	return run();
 }
@@ -95,16 +96,20 @@ function buildScss() {
 		.pipe(browserSync.stream());
 	} 
 
-	gulp.watch(`${SRC_DIR}/scss/**`, () => {
-		gutil.log('Detect SCSS changes. Rebuilding...');
-		return run();
-	});
+	if(argv.once) {
+		gulp.watch(`${SRC_DIR}/scss/**`, () => {
+			gutil.log('Detect SCSS changes. Rebuilding...');
+			return run();
+		});
+	}
 
 	return run();
 }
 
 function buildVendor() {
-	const b = persistify({ debug: false });
+	const b = persistify({ debug: false }, {
+		watch: !!!argv.once
+	});
 
 	vendors.forEach(vendor => {
 		b.require(vendor);
@@ -125,16 +130,17 @@ function buildVendor() {
 }
 
 function buildJs() {
-	let bopts = {
+	let opts = {
 		paths: [
 			`${SRC_DIR}/js`,
 			`${SRC_DIR}/scss`
 		],
 		debug: !isProduction
 	};
-	let opts = Object.assign({}, watchify.args, bopts);
 
-	let b = watchify(persistify(opts))
+	let b = persistify(opts, {
+		watch: !!!argv.once
+	})
 	.add(`${SRC_DIR}/js/index.js`)
 	.on('update', bundle)
 	.on('log', gutil.log)
@@ -157,7 +163,6 @@ function buildJs() {
 		.on('end', () => {
 			browserSync.reload();
 		})
-		.on('error', swallowError)
 		.pipe(source('bundle.js'));
 
 		if(isProduction) {
