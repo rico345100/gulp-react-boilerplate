@@ -96,7 +96,7 @@ function buildScss() {
 		.pipe(browserSync.stream());
 	} 
 
-	if(argv.once) {
+	if(!argv.once) {
 		gulp.watch(`${SRC_DIR}/scss/**`, () => {
 			gutil.log('Detect SCSS changes. Rebuilding...');
 			return run();
@@ -118,6 +118,7 @@ function buildVendor() {
 	let stream = b.bundle()
 	.on('error', swallowError)
 	.on('end', () => {
+		gutil.log(`Building JS:vendor done.`);
 		browserSync.reload();
 	})
 	.pipe(source('vendor.js'));
@@ -130,7 +131,7 @@ function buildVendor() {
 }
 
 function buildJs() {
-	let opts = {
+	const opts = {
 		paths: [
 			`${SRC_DIR}/js`,
 			`${SRC_DIR}/scss`
@@ -138,7 +139,7 @@ function buildJs() {
 		debug: !isProduction
 	};
 
-	let b = persistify(opts, {
+	const b = persistify(opts, {
 		watch: !!!argv.once
 	})
 	.add(`${SRC_DIR}/js/index.js`)
@@ -161,6 +162,7 @@ function buildJs() {
 		let stream = b.bundle()
 		.on('error', swallowError)
 		.on('end', () => {
+			gutil.log(`Building JS:bundle done.`);
 			browserSync.reload();
 		})
 		.pipe(source('bundle.js'));
