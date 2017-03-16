@@ -17,6 +17,7 @@ It is a just boilerplate for developing React Application with Browserify + Expr
 - ES7 Async & Await
 	- Yes, it uses babel-polyfill. If you feeling that babel-polyfill is too heavy, remove from depedencies and your code, but you cannot use Async & Await anymore. I recommend that just use it, but if you really hate it, then you can use ES6 Generator Coroutine instead.
 - ESLint
+- JSX Source Mapping(babel-plugin-transform-react-jsx-source)
 
 
 ## To Start

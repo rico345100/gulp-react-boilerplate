@@ -151,7 +151,8 @@ function buildJs() {
 		plugins: [
 			"syntax-async-functions",
 			"transform-regenerator",
-			"transform-class-properties"
+			"transform-class-properties",
+			"transform-react-jsx-source"
 		]
 	})
 	.transform(scssify, {
