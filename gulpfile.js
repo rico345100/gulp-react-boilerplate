@@ -152,6 +152,7 @@ function buildJs() {
 			"syntax-async-functions",
 			"transform-regenerator",
 			"transform-class-properties",
+			"transform-object-rest-spread",
 			"transform-react-jsx-source"
 		]
 	})
