@@ -86,7 +86,10 @@ function buildScss() {
 			buildEndTime = new Date();
 			gutil.log(`Building SCSS done. (Time elapsed ${buildEndTime - buildStartTime}ms.)`);
 		})
-		.pipe(sass());
+		.pipe(
+			sass()
+			.on('error', sass.logError)
+		);
 
 		if(isProduction) {
 			stream.pipe(cssnano());
@@ -153,11 +156,15 @@ function buildJs() {
 			"transform-regenerator",
 			"transform-class-properties",
 			"transform-object-rest-spread",
-			"transform-react-jsx-source"
+			"transform-react-jsx-source",
+			"transform-decorators-legacy"
 		]
 	})
 	.transform(scssify, {
-		autoInject: true
+		autoInject: true,
+		sass: {
+			"includePaths": [`${SRC_DIR}/scss`]
+		}
 	});
 	
 	function bundle() {

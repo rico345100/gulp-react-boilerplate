@@ -8,7 +8,7 @@ It is a just boilerplate for developing React Application with Browserify + Expr
 
 ## Features
 - Express
-- Livereload (feat. Browser-Sync)
+- Livereload (feat. Browser-Sync), also support remote Livereload via Browser-Sync proxy
 - SASS compiling
 - JS/CSS/HTML minification on production build
 - ES2015 Support
@@ -16,6 +16,7 @@ It is a just boilerplate for developing React Application with Browserify + Expr
 - Class Properties
 - ES7 Async & Await
 	- Yes, it uses babel-polyfill. If you feeling that babel-polyfill is too heavy, remove from depedencies and your code, but you cannot use Async & Await anymore. I recommend that just use it, but if you really hate it, then you can use ES6 Generator Coroutine instead.
+- ESNext Decorators
 - ESLint
 - JSX Source Mapping(babel-plugin-transform-react-jsx-source)
 
