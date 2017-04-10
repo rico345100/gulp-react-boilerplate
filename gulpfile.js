@@ -4,7 +4,7 @@ const config = require('./config.json');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const merge = require('merge-stream');
-const runSequence = require('run-sequence');
+const gulpSequence = require('gulp-sequence').use(gulp);
 const nodemon = require('gulp-nodemon');
 
 const persistify = require('persistify');
@@ -54,6 +54,7 @@ function buildHtml() {
 		.on('end', () => {
 			buildEndTime = new Date();
 			gutil.log(`Building HTML done. (Time elapsed ${buildEndTime - buildStartTime}ms.)`);
+			browserSync.reload();
 		});
 
 		if(isProduction) {
@@ -202,21 +203,13 @@ function serve() {
 				port: config.proxyPort || 4000
 			});
 
-			gulp.watch(`${SRC_DIR}/html/**`, buildHtml);
-			gulp.watch(`${SRC_DIR}/scss/**`, buildScss);
-
-			gulp.watch(`${BUILD_DIR}/html/index.html`).on('change', browserSync.reload);
-
 			// return empty stream
 			return gutil.noop();	
 		}
 	});
 }
 
-
-gulp.task('default', () => {
-	runSequence('build', 'serve');
-});
+gulp.task('default', gulpSequence('build', 'serve'));
 
 gulp.task('build', () => {
 	return merge([

@@ -35,6 +35,7 @@
     "gulp-htmlmin": "^3.0.0",
     "gulp-nodemon": "^2.2.1",
     "gulp-sass": "^3.1.0",
+    "gulp-sequence": "^0.4.6",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.8",
@@ -42,7 +43,6 @@
     "persistify": "^1.1.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "run-sequence": "^1.2.2",
     "scssify": "^2.2.1",
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^6.6.0"
