@@ -238,3 +238,15 @@ gulp.task('build::script', () => {
 gulp.task('serve', () => {
 	return serve();
 });
+
+const rmrf = require('rimraf');
+
+gulp.task('clear::cache', (cb) => {
+	rmrf(__dirname + '/node_modules/flat-cache/.cache', (err) => {
+		if(err) {
+			gutil.log(err.message);
+		}
+
+		cb();
+	});
+});

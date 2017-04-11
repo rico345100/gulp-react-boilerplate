@@ -43,6 +43,7 @@
     "persistify": "^1.1.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "rimraf": "^2.6.1",
     "scssify": "^2.2.1",
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^6.6.0"

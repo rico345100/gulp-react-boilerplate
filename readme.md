@@ -69,6 +69,10 @@ Build SCSS resources. In production build, it uses gulp-cssnano to minify CSS.
 Build JS resources. It will create two scripts, vendor.js and bundle.js.
 vendor.js contains common scripts and bundle.js contains actual your code.
 
+### gulp clear::cache
+Remove all caches. Currently it only deletes cache file of persistify, which is located in ./node_modules/flat-cache/.cache.
+Use it when you added new node modules but Browserify didn't recognize that.
+
 
 ## Production Build
 To set your application production mode, simply update "environment" inside of config.json to "production".
