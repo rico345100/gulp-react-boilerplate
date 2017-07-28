@@ -14,11 +14,13 @@ It is a just boilerplate for developing React Application with Browserify + Expr
 - ES2015 Support
 - React Support
 - Class Properties
-- ES7 Async & Await
+- ES2016 Async & Await
 	- Yes, it uses babel-polyfill. If you feeling that babel-polyfill is too heavy, remove from depedencies and your code, but you cannot use Async & Await anymore. I recommend that just use it, but if you really hate it, then you can use ES6 Generator Coroutine instead.
 - ESNext Decorators
 - ESLint
 - JSX Source Mapping(babel-plugin-transform-react-jsx-source)
+- Flow support
+- Mocha & Enzyme Integration with Gulp
 
 
 ## To Start
@@ -72,6 +74,20 @@ vendor.js contains common scripts and bundle.js contains actual your code.
 ### gulp clear::cache
 Remove all caches. Currently it only deletes cache file of persistify, which is located in ./node_modules/flat-cache/.cache.
 Use it when you added new node modules but Browserify didn't recognize that.
+
+### gulp flow
+Run flow tests. Note that you have to install flow-bin globally if you didn't.
+For install Flow globally, run
+```bash
+$ npm install flow bin -g
+```
+
+### gulp mocha
+Run Mocha tests. Note that you need to install Mocha globally, otherwise it won't work.
+For install Mocha globally, run
+```bash
+$ npm install mocha -g
+```
 
 
 ## Production Build

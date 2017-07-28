@@ -23,6 +23,7 @@ const yargs = require('yargs');
 const argv = yargs.argv;
 
 const browserSync = require('browser-sync');
+const { exec } = require('child_process');
 
 const vendors = [
 	'react',
@@ -33,6 +34,8 @@ const isProduction = config.environment === 'production';
 if(isProduction) {
 	process.env.NODE_ENV = 'production';
 }
+
+process.env.FORCE_COLOR = 1;
 
 const SRC_DIR = './src';
 const BUILD_DIR = './build';
@@ -151,7 +154,7 @@ function buildJs() {
 	.on('log', gutil.log)
 	.external(vendors)
 	.transform(babelify, { 
-		presets: ["es2015", "react"],
+		presets: ["es2015", "react", "flow"],
 		plugins: [
 			"syntax-async-functions",
 			"transform-regenerator",
@@ -228,11 +231,40 @@ gulp.task('build::scss', () => {
 	return buildScss();
 });
 
+function runFlow(done) {
+	exec("flow", (err, stdout, stderr) => {
+		if(err) {
+			console.log(stdout);
+			return done();
+		}
+
+		done();
+	});
+}
+
+gulp.task('flow', (done) => {
+	return runFlow(done);
+});
+
 gulp.task('build::script', () => {
 	return merge([
 		buildJs(), 
 		buildVendor()
 	]);
+});
+
+gulp.task('mocha', (done) => {
+	exec("mocha test/.setup.js test/**/*-test.js", (err, stdout, stderr) => {
+		if(err) {
+			console.log(err);
+			console.log(stderr);
+		}
+		else {
+			console.log(stdout);
+		}
+
+		done();
+	});
 });
 
 gulp.task('serve', () => {
